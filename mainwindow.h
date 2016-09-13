@@ -36,11 +36,15 @@ public:
     bool czyNalezyDoTrojkata(QPoint p, QPoint t[]);
     void teksturuj(QPoint bok[], QColor color);
 
+    void mousePressEvent(QMouseEvent *event);
+    void mouseReleaseEvent(QMouseEvent *event);
+    void mouseMoveEvent(QMouseEvent *event);
 
     void paintEvent(QPaintEvent*);
 
 private slots:
     void on_pushButton_clicked();
+
 
 private:
     Ui::MainWindow *ui;

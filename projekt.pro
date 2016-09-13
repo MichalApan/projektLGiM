@@ -16,8 +16,7 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     ball.cpp \
     vector.cpp \
-    point.cpp \
-    sleeper.cpp
+    point.cpp
 
 HEADERS  += mainwindow.h \
     ball.h \
@@ -26,3 +25,6 @@ HEADERS  += mainwindow.h \
     sleeper.h
 
 FORMS    += mainwindow.ui
+
+RESOURCES += \
+    resource.qrc

@@ -204,9 +204,6 @@ int acc = 5;
 int odbicie = 0;
 void MainWindow::on_pushButton_clicked()
 {
-    b=Ball(QPoint(ui->spinBox_posX->value(),ui->spinBox_posY->value()),ui->spinBox_speedX->value(), ui->spinBox_speedY->value());
-    //b=Ball(QPoint(100,300),25,0);
-    drawBall(b);
     Sleeper::msleep(2);
     int x = b.getActualPosition().x();
     while(x<1100){
@@ -271,5 +268,32 @@ void MainWindow::teksturuj(QPoint bok[], QColor color){
                 drawPoint(p,color);
             }
         }
+    }
+}
+
+int xP,yP,xR,yR,xM,yM;
+void MainWindow::mousePressEvent(QMouseEvent *event)
+{
+    xP = event->x()-firstX;
+    yP = event->x()-firstY;
+    ui->spinBox_posX->setValue(xP);
+    ui->spinBox_posY->setValue(yP);
+}
+
+void MainWindow::mouseReleaseEvent(QMouseEvent * event)
+{
+    xR = event->x()-firstX;
+    yR = event->y()-firstY;
+    ui->spinBox_speedX->setValue(xR-xP);
+    ui->spinBox_speedY->setValue(yR-yP);
+}
+
+void MainWindow::mouseMoveEvent(QMouseEvent * event)
+{
+    xM = event->x();
+    yM = event->y();
+    if(xM<400 && xM>100 && yM<400 && yM>100){
+        b=Ball(QPoint(xM,yM),ui->spinBox_speedX->value(), ui->spinBox_speedY->value());
+        drawBall(b);
     }
 }
