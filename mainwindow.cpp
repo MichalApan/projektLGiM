@@ -47,13 +47,13 @@ void MainWindow::normalize(float v[3]){
 
 void MainWindow::drawtriangle(float *v1, float *v2, float *v3, int x, int y){
     if(v1[2]>0 || v2[2]>0 || v3[2]>0){
-        int d = 800;
-        int xA = v1[0]/(1+v1[2]/d)+x;
-        int yA = v1[1]/(1+v1[2]/d)+y;
-        int xB = v2[0]/(1+v2[2]/d)+x;
-        int yB = v2[1]/(1+v2[2]/d)+y;
-        int xC = v3[0]/(1+v3[2]/d)+x;
-        int yC = v3[1]/(1+v3[2]/d)+y;
+        int d = 1800;
+        float xA = (1.0)*v1[0]/(1+(1.0)*v1[2]/d)+x;
+        float yA = (1.0)*v1[1]/(1+(1.0)*v1[2]/d)+y;
+        float xB = (1.0)*v2[0]/(1+(1.0)*v2[2]/d)+x;
+        float yB = (1.0)*v2[1]/(1+(1.0)*v2[2]/d)+y;
+        float xC = (1.0)*v3[0]/(1+(1.0)*v3[2]/d)+x;
+        float yC = (1.0)*v3[1]/(1+(1.0)*v3[2]/d)+y;
 
         QPoint A = QPoint(xA, yA);
         QPoint B = QPoint(xB, yB);
@@ -68,7 +68,6 @@ void MainWindow::drawtriangle(float *v1, float *v2, float *v3, int x, int y){
         Vector normal = Vector(Point(v1[0],v1[1],v1[2]),Point(v2[0],v2[1],v2[2])).crossProduct(Vector(Point(v2[0],v2[1],v2[2]),Point(v3[0],v3[1],v3[2])));
 
         double lightIlumination1 = lightVector.dotProduct(normal);
-        double lightIlumination2 = reflectedLight.dotProduct(Vector(0,0,-800));
 
         QPoint t[] = {A,B,C};
         int red = 250*lightIlumination1;
@@ -186,7 +185,7 @@ static int tindices[20][3] = {
 
 
 void MainWindow::drawBall(Ball b){
-    bg->load(":/new/img/bg.jpg");
+    bg->load(":/new/img/bg2.jpg");
     int x = b.getActualPosition().x();
     int y = b.getActualPosition().y();
 
@@ -195,7 +194,7 @@ void MainWindow::drawBall(Ball b){
         float v2[] = {vdata[tindices[i][1]][0],vdata[tindices[i][1]][1],vdata[tindices[i][1]][2]};
         float v3[] = {vdata[tindices[i][2]][0],vdata[tindices[i][2]][1],vdata[tindices[i][2]][2]};
 
-        subdivide(v1,v2,v3,3,x,y);
+        subdivide(v1,v2,v3,4,x,y);
     }
 }
 
