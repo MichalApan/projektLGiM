@@ -13,7 +13,7 @@ MainWindow::MainWindow(QWidget *parent) :
     firstY = ui->drawFrame->y();
 
     bg = new QImage(width,height,QImage::Format_RGB32);
-
+    bg->fill(Qt::gray);
     drawBall(b);
 }
 
@@ -68,14 +68,13 @@ void MainWindow::drawtriangle(float *v1, float *v2, float *v3, int x, int y){
         Vector normal = Vector(Point(v1[0],v1[1],v1[2]),Point(v2[0],v2[1],v2[2])).crossProduct(Vector(Point(v2[0],v2[1],v2[2]),Point(v3[0],v3[1],v3[2])));
 
         double lightIlumination1 = lightVector.dotProduct(normal);
-        double lightIlumination2 = 0.7*pow(reflectedLight.dotProduct(Vector(0,0,-800)),10.0);
+        double lightIlumination2 = reflectedLight.dotProduct(Vector(0,0,-800));
 
         QPoint t[] = {A,B,C};
-        int red = 255*lightIlumination1;
+        int red = 250*lightIlumination1;
         if(red>255) red = 255;
         if(red<0) red = 0;
-        teksturuj(t, QColor(red,red,100));
-
+        teksturuj(t, QColor(red,red,0));
     }
 }
 
@@ -203,47 +202,46 @@ int acc = 5;
 int odbicie = 0;
 void MainWindow::on_pushButton_clicked()
 {
-    bg->fill(Qt::gray);
-    int size = b.getSize();
-    int speedY = b.getSpeedY();
+    b=Ball(QPoint(ui->spinBox_posX->value(),ui->spinBox_posY->value()),ui->spinBox_speedX->value(), ui->spinBox_speedY->value());
+    //b=Ball(QPoint(100,300),25,0);
     int x = b.getActualPosition().x();
+    while(x<1100){
+        repaint();
+        Sleeper::msleep(10);
+        bg->fill(Qt::gray);
+        int size = b.getSize();
+        int speedY = b.getSpeedY();
+        x = b.getActualPosition().x();
 
-    if(odbicie == 0){
-        if(b.getActualPosition().y()>=height-size){
-            odbicie = 1;
-            b.setSpeedY((-0.6)*speedY);//razy wspolczynnik
-        }
-        else{
+        if(odbicie == 0){
+            if(b.getActualPosition().y()>=height-size){
+                odbicie = 1;
+                b.setSpeedY((-0.6)*speedY);//razy wspolczynnik
+            }
+            else{
+                b.setSpeedY(speedY+acc);
+            }
+        }else if(odbicie == 1){
+            if(speedY>0) odbicie = 0;
             b.setSpeedY(speedY+acc);
         }
-    }else if(odbicie == 1){
-        if(speedY>0) odbicie = 0;
-        b.setSpeedY(speedY+acc);
+        if(x>width-size || x<size){
+            b.setPosition(QPoint(width-size,b.getActualPosition().y()));
+            b.setSpeedX(b.getSpeedX()*(-0.8));
+        }
+
+        b.setPosition(b.getNextPosition());
+
+        if(b.getActualPosition().y()>=500){
+            b.setPosition(QPoint(b.getActualPosition().x(),500));
+            if(b.getSpeedY()<-3) b.setSpeedY(0);
+        }
+    //    if(x>=width-size){
+    //        b.setPosition(QPoint(width-size,b.getActualPosition().y()));
+    //        if(abs(b.getSpeedX())<5) b.setSpeedX(0);
+    //    }
+        drawBall(b);
     }
-    if(x>width-size || x<size){
-        b.setPosition(QPoint(width-size,b.getActualPosition().y()));
-        b.setSpeedX(b.getSpeedX()*(-0.8));
-    }
-
-    b.setPosition(b.getNextPosition());
-
-    if(b.getActualPosition().y()>=500){
-        b.setPosition(QPoint(b.getActualPosition().x(),500));
-        if(b.getSpeedY()<-3) b.setSpeedY(0);
-    }
-//    if(x>=width-size){
-//        b.setPosition(QPoint(width-size,b.getActualPosition().y()));
-//        if(abs(b.getSpeedX())<5) b.setSpeedX(0);
-//    }
-
-    QString text = QString("speedY: %1").arg(b.getSpeedY());
-    ui->textEdit->append(text);
-    text = QString("speedX: %1").arg(b.getSpeedX());
-        ui->textEdit->append(text);
-    text = QString("y: %1, x: %2").arg(b.getActualPosition().y()).arg(b.getActualPosition().x());
-    ui->textEdit->append(text);
-
-    drawBall(b);
 }
 
 bool MainWindow::czyNalezyDoTrojkata(QPoint p, QPoint t[]){

@@ -20,6 +20,7 @@ class Ball
 public:
     Ball(QPoint position);
     Ball();
+    Ball(QPoint position, int speedX, int speedY);
     QPoint getNextPosition();
     void setPosition(QPoint p);
     QPoint getActualPosition();

@@ -55,17 +55,56 @@
         <property name="midLineWidth">
          <number>-2</number>
         </property>
+        <zorder></zorder>
        </widget>
       </item>
       <item>
        <layout class="QVBoxLayout" name="verticalLayout">
         <item>
-         <widget class="QTextEdit" name="textEdit"/>
+         <widget class="QSpinBox" name="spinBox_posX">
+          <property name="minimum">
+           <number>100</number>
+          </property>
+          <property name="maximum">
+           <number>100</number>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QSpinBox" name="spinBox_posY">
+          <property name="minimum">
+           <number>100</number>
+          </property>
+          <property name="maximum">
+           <number>100</number>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QSpinBox" name="spinBox_speedX">
+          <property name="minimum">
+           <number>25</number>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QSpinBox" name="spinBox_speedY">
+          <property name="minimum">
+           <number>-99</number>
+          </property>
+         </widget>
         </item>
         <item>
          <widget class="QPushButton" name="pushButton">
           <property name="text">
-           <string>PushButton</string>
+           <string>Rzut</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="pushButton_2">
+          <property name="text">
+           <string>Wyjście</string>
           </property>
          </widget>
         </item>
@@ -78,5 +117,22 @@
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>pushButton_2</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1277</x>
+     <y>539</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1323</x>
+     <y>534</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

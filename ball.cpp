@@ -1,5 +1,13 @@
 #include "ball.h"
 
+
+Ball::Ball(QPoint position, int speedX, int speedY){
+    this->position = position;
+    this->speedX = speedX;
+    this->speedY = speedY;
+    this->size = 100;
+}
+
 Ball::Ball(QPoint position)
 {
     this->speedX = 25;

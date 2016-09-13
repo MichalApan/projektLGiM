@@ -3,6 +3,7 @@
 
 #include "ball.h"
 #include "vector.h"
+#include "sleeper.h"
 #include <QMainWindow>
 #include <QDialog>
 #include <QStack>

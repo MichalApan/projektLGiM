@@ -16,11 +16,13 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     ball.cpp \
     vector.cpp \
-    point.cpp
+    point.cpp \
+    sleeper.cpp
 
 HEADERS  += mainwindow.h \
     ball.h \
     vector.h \
-    point.h
+    point.h \
+    sleeper.h
 
 FORMS    += mainwindow.ui
