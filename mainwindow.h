@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include "ball.h"
+#include "vector.h"
 #include <QMainWindow>
 #include <QDialog>
 #include <QStack>
@@ -31,8 +32,9 @@ public:
 
     void drawBall(Ball b);
 
-    void teksturuj(QImage *img, QPoint bok[]);
     bool czyNalezyDoTrojkata(QPoint p, QPoint t[]);
+    void teksturuj(QPoint bok[], QColor color);
+
 
     void paintEvent(QPaintEvent*);
 

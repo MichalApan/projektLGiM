@@ -59,30 +59,22 @@ void MainWindow::drawtriangle(float *v1, float *v2, float *v3, int x, int y){
         QPoint B = QPoint(xB, yB);
         QPoint C = QPoint(xC, yC);
 
+//        drawLine(A,B, QColor(Qt::blue));
+//        drawLine(A,C, QColor(Qt::red));
+//        drawLine(B,C, QColor(Qt::green));
+
+        Vector lightVector(Point(300,300,-300), Point(v1[0],v1[1],v1[2]));
+        Vector reflectedLight(-lightVector.x,lightVector.y,-lightVector.z);
+        Vector normal = Vector(Point(v1[0],v1[1],v1[2]),Point(v2[0],v2[1],v2[2])).crossProduct(Vector(Point(v2[0],v2[1],v2[2]),Point(v3[0],v3[1],v3[2])));
+
+        double lightIlumination1 = lightVector.dotProduct(normal);
+        double lightIlumination2 = 0.7*pow(reflectedLight.dotProduct(Vector(0,0,-800)),10.0);
+
         QPoint t[] = {A,B,C};
-        teksturuj(bg,t);
-
-        drawLine(A,B, QColor(Qt::blue));
-        drawLine(A,C, QColor(Qt::red));
-        drawLine(B,C, QColor(Qt::green));
-
-
-
-//        int a1 = v1[0];
-//        int a2 = v1[1];
-//        int a3 = v1[2];
-//        int b1 = v2[0];
-//        int b2 = v2[1];
-//        int b3 = v2[2];
-//        int ab1 = a2*b3 - a3*b2;
-//        int ab2 = a3*b1 - a1*b3;
-//        int ab3 = a1*b2 - a2*b1;
-//        float ab[] = {ab1,ab2,ab3};
-//        normalize(ab);
-//        int abX = ab[0]/(1+ab[2]/d)+300;
-//        int abY = ab[1]/(1+ab[2]/d)+300;
-
-//        drawLine(QPoint(abX,abY),QPoint(300,300),Qt::black);
+        int red = 255*lightIlumination1;
+        if(red>255) red = 255;
+        if(red<0) red = 0;
+        teksturuj(t, QColor(red,red,100));
 
     }
 }
@@ -203,7 +195,7 @@ void MainWindow::drawBall(Ball b){
         float v2[] = {vdata[tindices[i][1]][0],vdata[tindices[i][1]][1],vdata[tindices[i][1]][2]};
         float v3[] = {vdata[tindices[i][2]][0],vdata[tindices[i][2]][1],vdata[tindices[i][2]][2]};
 
-        subdivide(v1,v2,v3,2,x,y);
+        subdivide(v1,v2,v3,4,x,y);
     }
 }
 
@@ -267,9 +259,8 @@ bool MainWindow::czyNalezyDoTrojkata(QPoint p, QPoint t[]){
     else return false;
 }
 
-void MainWindow::teksturuj(QImage *img, QPoint bok[]){
-    QPoint tab[]={QPoint(0,0),QPoint(200,0),QPoint(0,200)};
-    QPoint tab2[] = {bok[0], bok[1], bok[2]};
+void MainWindow::teksturuj(QPoint bok[], QColor color){
+    QPoint tab[] = {bok[0], bok[1], bok[2]};
 
     int maxX = std::max(bok[2].x(), std::max(bok[0].x(),bok[1].x()));
     int maxY = std::max(bok[2].y(), std::max(bok[0].y(),bok[1].y()));
@@ -279,23 +270,9 @@ void MainWindow::teksturuj(QImage *img, QPoint bok[]){
     for(int yT=minY; yT<maxY; yT++){
         for(int xT=minX; xT<maxX; xT++){
             QPoint p = QPoint(xT,yT);
-            bool check = czyNalezyDoTrojkata(p,tab2);
+            bool check = czyNalezyDoTrojkata(p,tab);
             if(check==true){
-                drawPoint(p,QColor(Qt::white));
-//                double u,v,w;
-//                double xa = tab2[0].x(), ya = tab2[0].y();
-//                double xb = tab2[1].x(), yb = tab2[1].y();
-//                double xc = tab2[2].x(), yc = tab2[2].y();
-
-//                v = ((xT-xa)*(yc-ya)-(yT-ya)*(xc-xa))/((xb-xa)*(yc-ya)-(yb-ya)*(xc-xa));
-//                w = ((xb-xa)*(yT-ya)-(yb-ya)*(xT-xa))/((xb-xa)*(yc-ya)-(yb-ya)*(xc-xa));
-//                u = 1-v-w;
-
-//                int xt = u * (1.0)*tab[0].x() + v * (1.0)*tab[1].x() + w * (1.0)*tab[2].x();
-//                int yt = u * (1.0)*tab[0].y() + v * (1.0)*tab[1].y() + w * (1.0)*tab[2].y();
-//                if(xT>=0,yT>=0,xT<=200,yT<=200){
-//                    drawPoint(p,img->pixel(QPoint(xt,yt)));
-//                }
+                drawPoint(p,color);
             }
         }
     }
