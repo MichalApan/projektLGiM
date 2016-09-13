@@ -13,7 +13,7 @@ MainWindow::MainWindow(QWidget *parent) :
     firstY = ui->drawFrame->y();
 
     bg = new QImage(width,height,QImage::Format_RGB32);
-    bg->fill(Qt::gray);
+
     drawBall(b);
 }
 
@@ -59,9 +59,9 @@ void MainWindow::drawtriangle(float *v1, float *v2, float *v3, int x, int y){
         QPoint B = QPoint(xB, yB);
         QPoint C = QPoint(xC, yC);
 
-//        drawLine(A,B, QColor(Qt::blue));
-//        drawLine(A,C, QColor(Qt::red));
-//        drawLine(B,C, QColor(Qt::green));
+        //        drawLine(A,B, QColor(Qt::blue));
+        //        drawLine(A,C, QColor(Qt::red));
+        //        drawLine(B,C, QColor(Qt::green));
 
         Vector lightVector(Point(300,300,-300), Point(v1[0],v1[1],v1[2]));
         Vector reflectedLight(-lightVector.x,lightVector.y,-lightVector.z);
@@ -186,6 +186,7 @@ static int tindices[20][3] = {
 
 
 void MainWindow::drawBall(Ball b){
+    bg->fill(Qt::gray);
     int x = b.getActualPosition().x();
     int y = b.getActualPosition().y();
 
@@ -196,6 +197,7 @@ void MainWindow::drawBall(Ball b){
 
         subdivide(v1,v2,v3,4,x,y);
     }
+    repaint();
 }
 
 int acc = 5;
@@ -204,11 +206,11 @@ void MainWindow::on_pushButton_clicked()
 {
     b=Ball(QPoint(ui->spinBox_posX->value(),ui->spinBox_posY->value()),ui->spinBox_speedX->value(), ui->spinBox_speedY->value());
     //b=Ball(QPoint(100,300),25,0);
+    drawBall(b);
+    Sleeper::msleep(2);
     int x = b.getActualPosition().x();
     while(x<1100){
-        repaint();
-        Sleeper::msleep(10);
-        bg->fill(Qt::gray);
+        Sleeper::msleep(2);
         int size = b.getSize();
         int speedY = b.getSpeedY();
         x = b.getActualPosition().x();
@@ -236,10 +238,6 @@ void MainWindow::on_pushButton_clicked()
             b.setPosition(QPoint(b.getActualPosition().x(),500));
             if(b.getSpeedY()<-3) b.setSpeedY(0);
         }
-    //    if(x>=width-size){
-    //        b.setPosition(QPoint(width-size,b.getActualPosition().y()));
-    //        if(abs(b.getSpeedX())<5) b.setSpeedX(0);
-    //    }
         drawBall(b);
     }
 }
