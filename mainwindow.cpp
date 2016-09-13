@@ -59,25 +59,30 @@ void MainWindow::drawtriangle(float *v1, float *v2, float *v3, int x, int y){
         QPoint B = QPoint(xB, yB);
         QPoint C = QPoint(xC, yC);
 
+        QPoint t[] = {A,B,C};
+        teksturuj(bg,t);
+
         drawLine(A,B, QColor(Qt::blue));
         drawLine(A,C, QColor(Qt::red));
         drawLine(B,C, QColor(Qt::green));
 
-        int a1 = v1[0];
-        int a2 = v1[1];
-        int a3 = v1[2];
-        int b1 = v2[0];
-        int b2 = v2[1];
-        int b3 = v2[2];
-        int ab1 = a2*b3 - a3*b2;
-        int ab2 = a3*b1 - a1*b3;
-        int ab3 = a1*b2 - a2*b1;
-        float ab[] = {ab1,ab2,ab3};
-        normalize(ab);
-        int abX = ab[0]/(1+ab[2]/d)+300;
-        int abY = ab[1]/(1+ab[2]/d)+300;
 
-        drawLine(QPoint(abX,abY),QPoint(300,300),Qt::black);
+
+//        int a1 = v1[0];
+//        int a2 = v1[1];
+//        int a3 = v1[2];
+//        int b1 = v2[0];
+//        int b2 = v2[1];
+//        int b3 = v2[2];
+//        int ab1 = a2*b3 - a3*b2;
+//        int ab2 = a3*b1 - a1*b3;
+//        int ab3 = a1*b2 - a2*b1;
+//        float ab[] = {ab1,ab2,ab3};
+//        normalize(ab);
+//        int abX = ab[0]/(1+ab[2]/d)+300;
+//        int abY = ab[1]/(1+ab[2]/d)+300;
+
+//        drawLine(QPoint(abX,abY),QPoint(300,300),Qt::black);
 
     }
 }
@@ -247,4 +252,51 @@ void MainWindow::on_pushButton_clicked()
     ui->textEdit->append(text);
 
     drawBall(b);
+}
+
+bool MainWindow::czyNalezyDoTrojkata(QPoint p, QPoint t[]){
+    float ax=t[0].x(), ay=t[0].y(), bx=t[1].x(), by=t[1].y(), cx=t[2].x(), cy=t[2].y();
+    float px = p.x(), py = p.y();
+    float d1, d2, d3;
+
+    d1 = px*(ay-by) + py*(bx-ax) + (ax*by-ay*bx);
+    d2 = px*(by-cy) + py*(cx-bx) + (bx*cy-by*cx);
+    d3 = px*(cy-ay) + py*(ax-cx) + (cx*ay-cy*ax);
+
+    if ((d1<=0)&&(d2<=0)&&(d3<=0) || (d1>=0)&&(d2>=0)&&(d3>=0) )  return true;
+    else return false;
+}
+
+void MainWindow::teksturuj(QImage *img, QPoint bok[]){
+    QPoint tab[]={QPoint(0,0),QPoint(200,0),QPoint(0,200)};
+    QPoint tab2[] = {bok[0], bok[1], bok[2]};
+
+    int maxX = std::max(bok[2].x(), std::max(bok[0].x(),bok[1].x()));
+    int maxY = std::max(bok[2].y(), std::max(bok[0].y(),bok[1].y()));
+    int minX = std::min(bok[2].x(), std::min(bok[0].x(),bok[1].x()));
+    int minY = std::min(bok[2].y(), std::min(bok[0].y(),bok[1].y()));
+
+    for(int yT=minY; yT<maxY; yT++){
+        for(int xT=minX; xT<maxX; xT++){
+            QPoint p = QPoint(xT,yT);
+            bool check = czyNalezyDoTrojkata(p,tab2);
+            if(check==true){
+                drawPoint(p,QColor(Qt::white));
+//                double u,v,w;
+//                double xa = tab2[0].x(), ya = tab2[0].y();
+//                double xb = tab2[1].x(), yb = tab2[1].y();
+//                double xc = tab2[2].x(), yc = tab2[2].y();
+
+//                v = ((xT-xa)*(yc-ya)-(yT-ya)*(xc-xa))/((xb-xa)*(yc-ya)-(yb-ya)*(xc-xa));
+//                w = ((xb-xa)*(yT-ya)-(yb-ya)*(xT-xa))/((xb-xa)*(yc-ya)-(yb-ya)*(xc-xa));
+//                u = 1-v-w;
+
+//                int xt = u * (1.0)*tab[0].x() + v * (1.0)*tab[1].x() + w * (1.0)*tab[2].x();
+//                int yt = u * (1.0)*tab[0].y() + v * (1.0)*tab[1].y() + w * (1.0)*tab[2].y();
+//                if(xT>=0,yT>=0,xT<=200,yT<=200){
+//                    drawPoint(p,img->pixel(QPoint(xt,yt)));
+//                }
+            }
+        }
+    }
 }

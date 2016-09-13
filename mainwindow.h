@@ -6,6 +6,7 @@
 #include <QDialog>
 #include <QStack>
 #include <cmath>
+#include <algorithm>
 #include <QPainter>
 #include <QImage>
 #include <QMouseEvent>
@@ -29,6 +30,9 @@ public:
     void drawtriangle(float *v1, float *v2, float *v3, int x, int y);
 
     void drawBall(Ball b);
+
+    void teksturuj(QImage *img, QPoint bok[]);
+    bool czyNalezyDoTrojkata(QPoint p, QPoint t[]);
 
     void paintEvent(QPaintEvent*);
 
