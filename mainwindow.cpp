@@ -186,7 +186,7 @@ static int tindices[20][3] = {
 
 
 void MainWindow::drawBall(Ball b){
-    bg->fill(Qt::gray);
+    bg->load(":/new/img/bg.jpg");
     int x = b.getActualPosition().x();
     int y = b.getActualPosition().y();
 
@@ -195,7 +195,7 @@ void MainWindow::drawBall(Ball b){
         float v2[] = {vdata[tindices[i][1]][0],vdata[tindices[i][1]][1],vdata[tindices[i][1]][2]};
         float v3[] = {vdata[tindices[i][2]][0],vdata[tindices[i][2]][1],vdata[tindices[i][2]][2]};
 
-        subdivide(v1,v2,v3,4,x,y);
+        subdivide(v1,v2,v3,3,x,y);
     }
 }
 
@@ -203,11 +203,11 @@ int acc = 5;
 int odbicie = 0;
 void MainWindow::on_pushButton_clicked()
 {
+    b=Ball(QPoint(ui->spinBox_posX->value(),ui->spinBox_posY->value()),ui->spinBox_speedX->value(), ui->spinBox_speedY->value());
     int x = b.getActualPosition().x();
     while(x<1100){
         repaint();
         Sleeper::msleep(10);
-        bg->fill(Qt::gray);
         int size = b.getSize();
         int speedY = b.getSpeedY();
         x = b.getActualPosition().x();
@@ -225,7 +225,6 @@ void MainWindow::on_pushButton_clicked()
             b.setSpeedY(speedY+acc);
         }
         if(x>width-size || x<size){
-            b.setPosition(QPoint(width-size,b.getActualPosition().y()));
             b.setSpeedX(b.getSpeedX()*(-0.8));
         }
 
@@ -276,16 +275,14 @@ void MainWindow::mousePressEvent(QMouseEvent *event)
 {
     xP = event->x()-firstX;
     yP = event->x()-firstY;
-    ui->spinBox_posX->setValue(xP);
-    ui->spinBox_posY->setValue(yP);
 }
 
 void MainWindow::mouseReleaseEvent(QMouseEvent * event)
 {
     xR = event->x()-firstX;
     yR = event->y()-firstY;
-    ui->spinBox_speedX->setValue(xR-xP);
-    ui->spinBox_speedY->setValue(yR-yP);
+    ui->spinBox_posX->setValue(xR);
+    ui->spinBox_posY->setValue(yR);
 }
 
 void MainWindow::mouseMoveEvent(QMouseEvent * event)
