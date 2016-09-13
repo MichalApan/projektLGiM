@@ -56,6 +56,7 @@ private:
     int firstX;
 
     Ball b;
+
 };
 
 
